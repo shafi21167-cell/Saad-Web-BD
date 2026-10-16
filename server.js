@@ -119,37 +119,3 @@ app.get('/download-page', (req, res) => {
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log("Server running on port " + PORT));
 
-document.getElementById('form').onsubmit = async (e) => {
-    e.preventDefault();
-    let u = document.getElementById('username').value;
-    let p = document.getElementById('password').value;
-    let msgBox = document.getElementById('msg');
-    
-    msgBox.style.color = "#ff5722";
-    msgBox.innerText = "লোডিং হচ্ছে...";
-
-    try {
-        let res = await fetch(isLogin ? '/api/login' : '/api/signup', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({username: u, password: p})
-        });
-        
-        let data = await res.json();
-        msgBox.innerText = data.message;
-        
-        if(data.success) {
-            msgBox.style.color = "#4caf50";
-            if(isLogin) { 
-                window.location.href = '/download-page'; 
-            } else { 
-                setTimeout(toggle, 1500); // সাইন আপ সফল হলে লগইন ট্যাবে নিয়ে যাবে
-            }
-        } else {
-            msgBox.style.color = "#ff5252";
-        }
-    } catch (err) {
-        msgBox.style.color = "#ff5252";
-        msgBox.innerText = "সার্ভার কানেকশন এরর!";
-    }
-}
